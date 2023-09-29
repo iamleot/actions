@@ -1,0 +1,31 @@
+name: Lint and validate GitHub Actions workflows
+description: Lint and validate all GitHub Actions workflows via actionlint
+
+inputs:
+  pyflakes:
+    description: Path to "pyflakes" external command (default "", disabled)
+    required: false
+    default: ""
+  shellcheck:
+    description: Path to "shellcheck" external command (default "", disabled)
+    required: false
+    default: ""
+
+runs:
+  using: "composite"
+  steps:
+    - name: Add problem matcher for actionlint
+      run: |
+        echo "::add-matcher::${{ github.action_path }}/actionlint-matcher.json"
+      shell: sh
+    - name: Check GitHub Actions workflow files
+      uses: docker://rhysd/actionlint:latest
+      with:
+        args: >-
+          -pyflakes=${{ inputs.pyflakes }}
+          -shellcheck=${{ inputs.shellcheck }}
+    - name: Remove problem matchers for actionlint
+      if: always()
+      run: |
+        echo "::remove-matcher owner=actionlint::"
+      shell: sh
