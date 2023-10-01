@@ -1,0 +1,21 @@
+name: Check Markdown formatting
+description: Check Markdown formatting via mdformat
+
+inputs:
+  paths:
+    description: Paths passed to mdformat
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install mdformat
+      run: |
+        pip install mdformat
+        _mdformat_version="$(mdformat --version)"
+        echo "::debug::mdformat version: ${_mdformat_version}"
+      shell: sh
+    - name: Check Markdown formatting
+      run: |
+        mdformat --check ${{ inputs.paths }}
+      shell: sh
