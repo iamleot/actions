@@ -1,0 +1,19 @@
+name: Test mdformat composite action
+
+'on':
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  mdformat:
+    name: Test mdformat
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Test mdformat composite action
+        uses: ./mdformat
+        with:
+          paths: .
