@@ -1,4 +1,5 @@
 name: Test mdformat composite action
+permissions: {}
 
 'on':
   push:
